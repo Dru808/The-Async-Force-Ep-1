@@ -1,41 +1,14 @@
 /*jshint esversion: 6*/
-
-function reqPerson4() {
-  const requestData = JSON.parse(this.responseText);
-  const name = requestData.name;
-  const personName = document.querySelector('#person4Name');
-  personName.innerHTML = 'I am ' + name;
-}
-
-function reqHomeWorld4() {
-  const requestData = JSON.parse(this.responseText);
-  const name = requestData.name;
-  const personWorld = document.querySelector('#person4HomeWorld');
-  personWorld.innerHTML = 'My home world is ' + name;
-}
-
-function reqPerson14() {
-  const requestData = JSON.parse(this.responseText);
-  const name = requestData.name;
-  const personName = document.querySelector('#person14Name');
-  personName.innerHTML = 'I am ' + name;
-}
-
-function reqSpecies14() {
-  const requestData = JSON.parse(this.responseText);
-  const name = requestData.name;
-  const personWorld = document.querySelector('#person14Species');
-  personWorld.innerHTML = 'I am of the ' + name + ' species';
-}
-
 function reqFilms() {
   const requestData = JSON.parse(this.responseText);
-  console.log('what it do? ', requestData.results[0].title);
+  console.log('what it do? ', requestData.results);
   const titles = requestData.results;
   const films = document.querySelector('#filmList');
-  // films.innerHTML =
 
-  for(let i = 0; i < requestData.results.length; i++) {
+  for(var i = 0; i < requestData.results.length; i++) {
+    const titleOfFilm = requestData.results[i].title;
+    // const
+
     let newLi = document.createElement('li');
     newLi.setAttribute('class', 'film');
     films.appendChild(newLi);
@@ -43,6 +16,7 @@ function reqFilms() {
     let filmTitle = document.createElement('h2');
     filmTitle.setAttribute('class', 'filmTitle');
     newLi.appendChild(filmTitle);
+    filmTitle.innerHTML = titleOfFilm;
 
     let planet = document.createElement('h3');
     newLi.appendChild(planet);
@@ -51,31 +25,59 @@ function reqFilms() {
     newUl.setAttribute('class', 'filmPlanets');
     newLi.appendChild(newUl);
 
+//remember that i and j are different numbers running through different loops
+
+    const howManyPlanets = requestData.results[i].planets;
+    console.log('number of planets ', howManyPlanets);
+    for(let j = 0; j < howManyPlanets.length; j++) {
+
+      function reqPlanets() {
+        getPlanetData = JSON.parse(this.responseText);
+        const getPlanetname = getPlanetData.name;
+        console.log('planetname ', getPlanetname);
+
+        let newLi2 = document.createElement('li');
+        newLi2.setAttribute('class', 'planet');
+        newUl.appendChild(newLi2);
+
+
+        let pName = document.createElement('h4');
+        pName.setAttribute('class', 'planetName');
+        pName.innerHTML = getPlanetname;
+        newLi2.appendChild(pName);
+
+
+      }
+
+      const oReqPlanets = new XMLHttpRequest();
+      oReqPlanets.addEventListener('load', reqPlanets);
+      oReqPlanets.open('GET' , requestData.results[i].planets[j]);
+      oReqPlanets.send();
+    }
+
+
+
+
+
 
   }
 }
 
-const oReq = new XMLHttpRequest();
-oReq.addEventListener('load', reqPerson4);
-oReq.open('GET' , 'http://swapi.co/api/people/4/');
-oReq.send();
 
-const oReq2 = new XMLHttpRequest();
-oReq2.addEventListener('load', reqHomeWorld4);
-oReq2.open('GET' , 'http://swapi.co/api/planets/1/');
-oReq2.send();
 
-const oReq3 = new XMLHttpRequest();
-oReq3.addEventListener('load', reqPerson14);
-oReq3.open('GET' , 'http://swapi.co/api/people/14/');
-oReq3.send();
-
-const oReq4 = new XMLHttpRequest();
-oReq4.addEventListener('load', reqSpecies14);
-oReq4.open('GET' , 'http://swapi.co/api/species/1/');
-oReq4.send();
 
 const oReq5 = new XMLHttpRequest();
-oReq4.addEventListener('load', reqFilms);
-oReq4.open('GET' , 'http://swapi.co/api/films/');
-oReq4.send();
+oReq5.addEventListener('load', reqFilms);
+oReq5.open('GET' , 'http://swapi.co/api/films/');
+oReq5.send();
+
+
+
+
+
+
+
+
+
+
+
